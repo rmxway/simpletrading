@@ -7,7 +7,9 @@ import { TableCell, TableHeader, TableItem, TableStyled } from './styled';
 const Table: FC = () => (
 	<TableStyled>
 		<TableHeader>
-			<TableCell width={350} flexGrow>Актив</TableCell>
+			<TableCell width={350} flexGrow>
+				Актив
+			</TableCell>
 			<TableCell width={100}>Операция</TableCell>
 			<TableCell width={100}>Заметка</TableCell>
 			<TableCell width={150}>Дата сделки</TableCell>

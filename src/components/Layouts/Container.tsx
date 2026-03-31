@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components/macro';
 
 import { media } from '@/theme';
 
-const Container = styled.div<{ mt?: boolean }>`
+export const Container = styled.div<{ mt?: boolean }>`
 	position: relative;
 	padding: ${(props) => `0 ${props.theme.layout.paddingX2}`};
 	width: 100%;
@@ -28,6 +28,3 @@ const Container = styled.div<{ mt?: boolean }>`
 		max-width: 1280px;
 	`}
 `;
-
-export { Container };
-export default Container;

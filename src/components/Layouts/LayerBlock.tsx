@@ -1,22 +1,23 @@
 import { motion } from 'framer-motion';
 import { lighten } from 'polished';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 
 interface LayerTypes {
 	mt?: string;
 }
 
-const LayerBlock = styled(motion.div)<LayerTypes>`
-	position: relative;
-	padding: ${(props) => props.theme.layout.paddingX3};
-	border-radius: ${(props) => props.theme.radius.borderRadius};
-	margin-bottom: ${(props) => props.theme.layout.marginX2};
-	color: ${(props) => props.theme.colors.gray.$4};
-	background-color: ${(props) => lighten(0.03, props.theme.layout.bgColor)};
-	box-shadow: ${(props) => props.theme.layout.shadow};
-
-	${(props) => props.mt && `margin-top: ${props.theme.layout.marginX2};`}
+export const LayerBlock = styled(motion.div)<LayerTypes>`
+	${({ theme, mt }) => css`
+		position: relative;
+		padding: ${theme.layout.paddingX3};
+		border-radius: ${theme.radius.borderRadius};
+		margin-bottom: ${theme.layout.marginX2};
+		color: ${theme.colors.gray.$4};
+		background-color: ${lighten(0.03, theme.layout.bgColor)};
+		box-shadow: ${theme.layout.shadow};
+		${mt &&
+		css`
+			margin-top: ${theme.layout.marginX2};
+		`}
+	`}
 `;
-
-export { LayerBlock };
-export default LayerBlock;

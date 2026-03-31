@@ -1,10 +1,9 @@
-import { createChart, IChartApi } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import { FC, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components/macro';
 
 import { defaultTheme } from '@/theme';
 
-import { data, dataArea as area } from './candleStickData';
 import { ChartType } from './types';
 
 const ChartRoot = styled.div<{ $height: string; $width: string }>`
@@ -14,9 +13,10 @@ const ChartRoot = styled.div<{ $height: string; $width: string }>`
 	`}
 `;
 
-const CreateChart: FC<ChartType> = ({ height = '300px', width = '100%', ...props }) => {
+export const CreateChart: FC<ChartType> = ({ height = '300px', width = '100%', data, ...props }) => {
 	const ref = useRef<HTMLDivElement>(null);
 	const chartRef = useRef<IChartApi | null>(null);
+	const seriesRef = useRef<ISeriesApi<'Area'> | null>(null);
 
 	useEffect(() => {
 		const el = ref.current;
@@ -28,6 +28,7 @@ const CreateChart: FC<ChartType> = ({ height = '300px', width = '100%', ...props
 			grid: { horzLines: { color: colors.gray.$7 }, vertLines: { color: colors.gray.$7 } },
 			layout: { textColor: '#fff', background: { color: 'rgba(0,0,0,0)' } },
 			localization: { locale: 'RU' },
+			width: el.clientWidth,
 		});
 		chartRef.current = chart;
 
@@ -38,23 +39,12 @@ const CreateChart: FC<ChartType> = ({ height = '300px', width = '100%', ...props
 			lineType: 2,
 			lineWidth: 3,
 		});
-		areaSeries.setData(area);
-
-		const candlestickSeries = chart.addCandlestickSeries({
-			upColor: colors.success,
-			downColor: colors.danger,
-			borderVisible: false,
-			wickUpColor: colors.success,
-			wickDownColor: colors.danger,
-		});
-		candlestickSeries.setData(data);
-
-		chart.timeScale().fitContent();
+		seriesRef.current = areaSeries;
 
 		const handleResize = () => {
 			if (!el || !chartRef.current) return;
 			chartRef.current.applyOptions({ width: el.clientWidth });
-			chartRef.current.timeScale().scrollToRealTime();
+			chartRef.current.timeScale().fitContent();
 		};
 
 		window.addEventListener('resize', handleResize);
@@ -63,11 +53,17 @@ const CreateChart: FC<ChartType> = ({ height = '300px', width = '100%', ...props
 			window.removeEventListener('resize', handleResize);
 			chart.remove();
 			chartRef.current = null;
+			seriesRef.current = null;
 		};
 	}, []);
+
+	useEffect(() => {
+		if (!seriesRef.current || data.length === 0) return;
+		seriesRef.current.setData(data);
+		chartRef.current?.timeScale().fitContent();
+	}, [data]);
 
 	return <ChartRoot {...props} ref={ref} $height={height} $width={width} />;
 };
 
-export { CreateChart };
-export default CreateChart;
+export { ChartSkeleton } from './ChartSkeleton';

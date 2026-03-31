@@ -1,37 +1,72 @@
 import { FC } from 'react';
+import styled from 'styled-components/macro';
 
-import { CreateChart, InfoBlock, Table } from '@/components';
+import { ChartSkeleton, CreateChart, InfoBlock } from '@/components';
 import { Container, Flexbox, LayerBlock } from '@/components/Layouts';
+import { useCurrencyData } from '@/hooks/useCurrencyData';
 
-const MainPage: FC = () => (
-	<Container>
-		<h2>Текущее состояние</h2>
-		<LayerBlock mt="true">
-			<Flexbox>
-				<InfoBlock
-					title="Стоимость"
-					mainValue={12093}
-					mainCurrency="$"
-					additionalValue={10000}
-					additionalCurrency="$"
-				/>
-				<InfoBlock title="Суммарная прибыль" mainValue={3324.94} mainCurrency="$" state={28.22} />
-				<InfoBlock title="Доходность" mainValue={46} mainCurrency="%" />
-				<InfoBlock title="Изменение в день" mainValue={193.67} mainCurrency="$" state={1.67} statePlus />
-			</Flexbox>
-		</LayerBlock>
+const StatusMessage = styled.p`
+	color: ${(props) => props.theme.colors.gray.$4};
+	margin: 0;
+`;
 
-		<h2>Графики</h2>
-		<LayerBlock mt="true">
-			<CreateChart />
-		</LayerBlock>
+const round2 = (value: number): number => Math.round(value * 100) / 100;
 
-		<h2>Сделки</h2>
+const absPercent = (value: number): number => round2(Math.abs(value));
+
+const MainPage: FC = () => {
+	const { areaData, stats, loading, error } = useCurrencyData();
+
+	return (
+		<Container>
+			<h2>Курс USD/RUB (ЦБ РФ)</h2>
+			<LayerBlock mt="true">
+				{loading ? <StatusMessage>Загрузка курса…</StatusMessage> : null}
+				{!loading && error ? <StatusMessage>{error}</StatusMessage> : null}
+				{!loading && !error && stats ? (
+					<Flexbox>
+						<InfoBlock title="Текущий курс" mainValue={round2(stats.current)} mainCurrency="₽ за $1" />
+						<InfoBlock
+							title="Изменение за день"
+							mainValue={round2(stats.changeDayAbs)}
+							mainCurrency="₽"
+							state={absPercent(stats.changeDayPercent)}
+							statePlus={stats.changeDayAbs >= 0}
+						/>
+						<InfoBlock
+							title="Изменение за неделю"
+							mainValue={round2(stats.changeWeekAbs)}
+							mainCurrency="₽"
+							state={absPercent(stats.changeWeekPercent)}
+							statePlus={stats.changeWeekAbs >= 0}
+						/>
+						<InfoBlock
+							title="Изменение за месяц"
+							mainValue={round2(stats.changeMonthAbs)}
+							mainCurrency="₽"
+							state={absPercent(stats.changeMonthPercent)}
+							statePlus={stats.changeMonthAbs >= 0}
+						/>
+					</Flexbox>
+				) : null}
+			</LayerBlock>
+
+			<h2>Динамика за 3 месяца</h2>
+			<LayerBlock mt="true">
+				{loading ? <ChartSkeleton /> : null}
+				{!loading && !error && areaData.length > 0 ? <CreateChart data={areaData} /> : null}
+				{!loading && !error && areaData.length === 0 ? (
+					<StatusMessage>Нет данных для графика</StatusMessage>
+				) : null}
+			</LayerBlock>
+
+			{/* <h2>Сделки</h2>
 		<LayerBlock mt="true">
 			<Table />
-		</LayerBlock>
-	</Container>
-);
+		</LayerBlock> */}
+		</Container>
+	);
+};
 
 export { MainPage };
 export default MainPage;

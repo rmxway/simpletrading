@@ -1,6 +1,7 @@
 @font-face {
 	font-family: 'icofont';
-	src: url('.//icofont.ttf?290d591a15968c1f58ca17d01a368add') format('truetype'),
+	src:
+		url('.//icofont.ttf?290d591a15968c1f58ca17d01a368add') format('truetype'),
 		url('.//icofont.woff?290d591a15968c1f58ca17d01a368add') format('woff'),
 		url('.//icofont.woff2?290d591a15968c1f58ca17d01a368add') format('woff2');
 }

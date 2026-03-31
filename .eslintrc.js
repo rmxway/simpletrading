@@ -65,6 +65,7 @@ module.exports = {
 			},
 		],
 		'import/no-named-as-default': 'error',
+		'import/prefer-default-export': 'off',
 		'import/extensions': [
 			'error',
 			'ignorePackages',
@@ -94,4 +95,12 @@ module.exports = {
 		},
 	},
 	parser: '@typescript-eslint/parser',
+	overrides: [
+		{
+			files: ['craco.config.ts'],
+			rules: {
+				'@typescript-eslint/no-require-imports': 'off',
+			},
+		},
+	],
 };
