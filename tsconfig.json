@@ -1,0 +1,21 @@
+{
+	"extends": "./tsconfig.paths.json",
+	"compilerOptions": {
+		"target": "ES6",
+		"module": "commonjs",
+		"allowJs": true,
+		"jsx": "react-jsx",
+		"outDir": "./build",
+		"baseUrl": "./src",
+		"removeComments": true,
+		"sourceMap": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "node"
+	},
+	"include": ["**/*.ts", "**/*.tsx", "@types/declarations.d.ts"],
+	"exclude": ["node_modules", ".vscode"],
+	"display": "Recommended"
+}

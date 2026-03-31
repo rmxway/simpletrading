@@ -1,0 +1,10 @@
+{
+	"language": "en,ru",
+	"version": "0.2",
+	"ignorePaths": [],
+	"dictionaryDefinitions": [],
+	"dictionaries": [],
+	"words": ["Craco", "desaturate", "fantasticon", "Flexbox", "icofont", "reduxjs", "smartinvest"],
+	"ignoreWords": [],
+	"import": []
+}

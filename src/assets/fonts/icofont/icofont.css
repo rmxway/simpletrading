@@ -1,0 +1,32 @@
+@font-face {
+	font-family: 'icofont';
+	src: url('.//icofont.ttf?290d591a15968c1f58ca17d01a368add') format('truetype'),
+		url('.//icofont.woff?290d591a15968c1f58ca17d01a368add') format('woff'),
+		url('.//icofont.woff2?290d591a15968c1f58ca17d01a368add') format('woff2');
+}
+
+i[class^='icofont-']:before,
+i[class*=' icofont-']:before {
+	font-family: icofont !important;
+	font-style: normal;
+	font-size: 1rem;
+	font-weight: normal !important;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icofont-arrow-down:before {
+	content: '\f101';
+}
+.icofont-star-filled:before {
+	content: '\f102';
+}
+.icofont-star:before {
+	content: '\f103';
+}
+.icofont-times-small:before {
+	content: '\f104';
+}

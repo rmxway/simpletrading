@@ -1,0 +1,46 @@
+@use 'sass:map';
+
+$icofont-font: 'icofont';
+
+@font-face {
+	font-family: $icofont-font;
+	src:
+		url('.//icofont.ttf?290d591a15968c1f58ca17d01a368add') format('truetype'),
+		url('.//icofont.woff?290d591a15968c1f58ca17d01a368add') format('woff'),
+		url('.//icofont.woff2?290d591a15968c1f58ca17d01a368add') format('woff2');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+.icofont {
+	font-family: $icofont-font !important;
+	font-style: normal;
+	font-weight: normal !important;
+	font-variant: normal;
+	text-transform: none;
+	font-size: 1rem;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+$icofont-map: (
+	'arrow-down': '\f101',
+	'star-filled': '\f102',
+	'star': '\f103',
+	'times-small': '\f104',
+);
+
+.icofont-arrow-down:before {
+	content: map.get($icofont-map, 'arrow-down');
+}
+.icofont-star-filled:before {
+	content: map.get($icofont-map, 'star-filled');
+}
+.icofont-star:before {
+	content: map.get($icofont-map, 'star');
+}
+.icofont-times-small:before {
+	content: map.get($icofont-map, 'times-small');
+}
