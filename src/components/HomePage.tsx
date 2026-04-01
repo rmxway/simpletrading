@@ -3,7 +3,7 @@
 import { FC } from 'react';
 import styled, { css } from 'styled-components';
 
-import { ChartSkeleton, CreateChart, InfoBlock, Table } from '@/components';
+import { ChartSkeleton, CreateChart, InfoBlock } from '@/components';
 import { Container, Flexbox, LayerBlock } from '@/components/Layouts';
 import { useCurrencyData } from '@/hooks/useCurrencyData';
 
@@ -64,10 +64,10 @@ export const HomePage: FC = () => {
 				) : null}
 			</LayerBlock>
 
-			<h2>Сделки</h2>
+			{/* <h2>Сделки</h2>
 			<LayerBlock $mt>
 				<Table />
-			</LayerBlock>
+			</LayerBlock> */}
 		</Container>
 	);
 };

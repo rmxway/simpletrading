@@ -3,6 +3,7 @@
 	"version": "0.1.1",
 	"private": true,
 	"dependencies": {
+		"@tanstack/react-query": "^5.96.1",
 		"@testing-library/dom": "^9.3.4",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^14.0.0",

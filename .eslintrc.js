@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
 	root: true,
 	extends: ['next/core-web-vitals', 'plugin:import/recommended', 'plugin:import/typescript', 'prettier'],
@@ -20,6 +22,7 @@ module.exports = {
 			'error',
 			{
 				devDependencies: true,
+				packageDir: path.resolve(__dirname),
 			},
 		],
 		'import/no-named-as-default': 'error',

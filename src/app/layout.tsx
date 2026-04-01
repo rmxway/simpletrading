@@ -3,6 +3,7 @@ import '@/assets/fonts/icofont/icofont.css';
 import type { Metadata } from 'next';
 
 import { AppProviders } from './providers';
+import { StyledComponentsRegistry } from './styled-registry';
 
 export const metadata: Metadata = {
 	title: 'Simple Trading',
@@ -25,7 +26,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				/>
 			</head>
 			<body>
-				<AppProviders>{children}</AppProviders>
+				<StyledComponentsRegistry>
+					<AppProviders>{children}</AppProviders>
+				</StyledComponentsRegistry>
 			</body>
 		</html>
 	);

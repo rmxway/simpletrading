@@ -33,8 +33,7 @@ const cbrDateToIso = (cbrDate: string): string | null => {
  * ЦБ отдаёт XML с encoding="windows-1251"; DOMParser в браузере часто создаёт parsererror
  * или прокси может подставить HTML. Надёжнее вытащить Record/Value регуляркой.
  */
-const RECORD_VALUE_PATTERN =
-	/<Record\b[^>]*\bDate="(\d{2}\.\d{2}\.\d{4})"[^>]*>[\s\S]*?<Value>([^<]*)<\/Value>/gi;
+const RECORD_VALUE_PATTERN = /<Record\b[^>]*\bDate="(\d{2}\.\d{2}\.\d{4})"[^>]*>[\s\S]*?<Value>([^<]*)<\/Value>/gi;
 
 const parseCbrDynamicXmlWithRegex = (raw: string): CbrRatePoint[] => {
 	const text = raw.replace(/^\uFEFF/, '').trim();

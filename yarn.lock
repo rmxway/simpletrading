@@ -1258,6 +1258,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.96.1":
+  version: 5.96.1
+  resolution: "@tanstack/query-core@npm:5.96.1"
+  checksum: 10/e53996e9560fb2908c0f78cbf8564f48cc19d797a020e85da8c68cfa2c4c9eea6ea3733933f04f456bc807b2c08c201109237d5b633a254b864cf6c31d8b54d6
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.96.1":
+  version: 5.96.1
+  resolution: "@tanstack/react-query@npm:5.96.1"
+  dependencies:
+    "@tanstack/query-core": "npm:5.96.1"
+  peerDependencies:
+    react: ^18 || ^19
+  checksum: 10/e0984a5180733aa0389a8eb97332779b7fc17f6b016ab4d784aa6251e29e61b1579783403f6f7eeccfd8cf7a32020f5074e098ad39217b83040d393dbe784793
+  languageName: node
+  linkType: hard
+
 "@testing-library/dom@npm:^9.0.0":
   version: 9.0.0
   resolution: "@testing-library/dom@npm:9.0.0"
@@ -6464,6 +6482,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.26.0"
     "@babel/preset-react": "npm:^7.26.0"
+    "@tanstack/react-query": "npm:^5.96.1"
     "@testing-library/dom": "npm:^9.3.4"
     "@testing-library/jest-dom": "npm:^5.16.5"
     "@testing-library/react": "npm:^14.0.0"

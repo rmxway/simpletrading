@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+'use client';
+
+
+import { useQuery } from '@tanstack/react-query';
 
 import type { DataAreaType } from '@/components/Charts/Chart/types';
 import { fetchCbrUsdRubDynamics } from '@/services/cbr-api';
@@ -11,50 +14,29 @@ export interface UseCurrencyDataResult {
 	error: string | null;
 }
 
+const currencyDataQueryKey = ['cbr', 'usd-rub', 'dynamics-3m'] as const;
+
 export const useCurrencyData = (): UseCurrencyDataResult => {
-	const [areaData, setAreaData] = useState<DataAreaType[]>([]);
-	const [stats, setStats] = useState<RateStats | null>(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
+	const query = useQuery({
+		queryKey: currencyDataQueryKey,
+		queryFn: async () => {
+			const to = new Date();
+			const from = new Date(to);
+			from.setMonth(from.getMonth() - 3);
 
-	useEffect(() => {
-		let cancelled = false;
+			const xml = await fetchCbrUsdRubDynamics(from, to);
+			const parsed = parseCbrDynamicXml(xml);
+			return {
+				stats: computeRateStats(parsed),
+				areaData: toAreaSeriesData(parsed),
+			};
+		},
+	});
 
-		const load = async () => {
-			try {
-				setLoading(true);
-				setError(null);
-
-				const to = new Date();
-				const from = new Date(to);
-				from.setMonth(from.getMonth() - 3);
-
-				const xml = await fetchCbrUsdRubDynamics(from, to);
-				if (cancelled) return;
-
-				const parsed = parseCbrDynamicXml(xml);
-				const nextStats = computeRateStats(parsed);
-
-				setStats(nextStats);
-				setAreaData(toAreaSeriesData(parsed));
-			} catch (e) {
-				if (cancelled) return;
-				setError(e instanceof Error ? e.message : 'Ошибка загрузки');
-				setStats(null);
-				setAreaData([]);
-			} finally {
-				if (!cancelled) setLoading(false);
-			}
-		};
-
-		load().catch(() => {
-			// ошибка уже обработана внутри load
-		});
-
-		return () => {
-			cancelled = true;
-		};
-	}, []);
-
-	return { areaData, stats, loading, error };
+	return {
+		areaData: query.data?.areaData ?? [],
+		stats: query.data?.stats ?? null,
+		loading: query.isPending,
+		error: query.error instanceof Error ? query.error.message : query.isError ? 'Ошибка загрузки' : null,
+	};
 };

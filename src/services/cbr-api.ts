@@ -1,5 +1,38 @@
 const CBR_USD_CODE = 'R01235';
 
+/** Как long staleTime в query-provider: после F5 данные берутся отсюда, без сети. */
+const CBR_CLIENT_CACHE_MS = 10 * 60 * 1000;
+
+const CBR_STORAGE_KEY_PREFIX = 'st:cbr-dynamics:';
+
+type CbrClientCacheEntry = { savedAt: number; xml: string };
+
+const readCbrClientCache = (key: string): string | null => {
+	if (typeof window === 'undefined') return null;
+	try {
+		const raw = sessionStorage.getItem(key);
+		if (!raw) return null;
+		const parsed = JSON.parse(raw) as CbrClientCacheEntry;
+		if (Date.now() - parsed.savedAt > CBR_CLIENT_CACHE_MS) {
+			sessionStorage.removeItem(key);
+			return null;
+		}
+		return parsed.xml;
+	} catch {
+		return null;
+	}
+};
+
+const writeCbrClientCache = (key: string, xml: string): void => {
+	if (typeof window === 'undefined') return;
+	try {
+		const entry: CbrClientCacheEntry = { savedAt: Date.now(), xml };
+		sessionStorage.setItem(key, JSON.stringify(entry));
+	} catch {
+		// квота / приватный режим
+	}
+};
+
 /** Публичный URL прокси к ЦБ (по умолчанию тот же origin, `/api/cbr`). */
 const resolveCbrApiBase = (): string => {
 	const custom = process.env.NEXT_PUBLIC_CBR_API_BASE?.trim();
@@ -23,11 +56,18 @@ export const fetchCbrUsdRubDynamics = async (from: Date, to: Date): Promise<stri
 
 	const prefix = resolveCbrApiBase();
 	const url = `${prefix}/api/cbr?${params.toString()}`;
+	const storageKey = `${CBR_STORAGE_KEY_PREFIX}${prefix}|${params.toString()}`;
+
+	const cached = readCbrClientCache(storageKey);
+	if (cached !== null) return cached;
+
 	const response = await fetch(url);
 
 	if (!response.ok) {
 		throw new Error(`ЦБ РФ: ответ ${response.status}`);
 	}
 
-	return response.text();
+	const xml = await response.text();
+	writeCbrClientCache(storageKey, xml);
+	return xml;
 };
