@@ -1,46 +1,120 @@
-# Simple Trading — клиент
+# 💱 Simple Trading
 
-Самостоятельное фронтенд-приложение (CRA + Craco). .NET API из монорепозитория **не** запускается отсюда: при необходимости поднимайте бэкенд отдельно (например, `SimpleTrading.Api` рядом с этой папкой) и настройте `REACT_APP_*` или прокси в `src/setupProxy.js`, когда появятся реальные запросы к API.
+Веб-приложение для наглядного просмотра **курса валют**. Сейчас в фокусе пара **рубль ↔ доллар США** (официальные данные **ЦБ РФ**). В планах — **переключение между активами** (другие валюты и инструменты) без смены общей логики интерфейса.
 
-Изначально проект создан через [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+## 📌 О проекте
 
-In the project directory, you can run:
+На главной странице собраны график динамики, таблица значений и информационные блоки — всё завязано на данные Центробанка. Запросы к внешнему API идут через **собственный маршрут** приложения (`/api/cbr`), чтобы обойти ограничения браузера (CORS) и держать единую точку входа к источнику курсов.
 
-### `yarn start` / `yarn dev`
+**Страница «О проекте»** — отдельный маршрут с поясняющим контентом.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 🗺️ Что уже есть и что дальше
 
-### `yarn test`
+| Сейчас                         | Впереди                           |
+| ------------------------------ | --------------------------------- |
+| Курс USD/RUB по данным ЦБ РФ   | Выбор актива (валюты и др.) в UI  |
+| График и таблица по диапазону  | Расширение списка инструментов    |
+| Next.js App Router, TypeScript | Улучшения UX под мультивалютность |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `yarn build`
+## 🧰 Стек
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Next.js** (App Router) — маршруты, API Route для прокси к ЦБ
+- **React** + **TypeScript**
+- **styled-components** — тема и компоненты
+- **lightweight-charts** — график
+- **Yarn** — менеджер пакетов
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 📂 Структура папок
 
-### `yarn eject`
+Кратко, что лежит в `src/` (без `node_modules` и служебных каталогов сборки):
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```text
+src/
+├── app/                    # Next.js App Router
+│   ├── page.tsx            # главная (HomePage)
+│   ├── layout.tsx
+│   ├── about/              # страница «О проекте»
+│   └── api/cbr/            # прокси к XML ЦБ РФ
+├── components/             # UI и страничные блоки
+│   ├── Blocks/InfoBlock/
+│   ├── Charts/Chart/
+│   ├── Layouts/            # Container, Flexbox, LayerBlock, Space
+│   ├── Table/
+│   └── ui/                 # Button, Input, Navbar
+├── hooks/                  # например useCurrencyData
+├── services/               # клиент к `/api/cbr` (cbr-api)
+├── data/                   # демо-данные при необходимости
+├── theme/                  # тема, глобальные стили, миксины
+├── utils/                  # разбор XML и прочее
+├── assets/                 # шрифты, изображения
+├── fantasticon/icons/      # исходные SVG для генерации иконочного шрифта
+└── …                       # store, server, pages — по мере развития проекта
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+`public/` — статика для Next.js. Сгенерированные файлы иконочного шрифта после `yarn icofont` попадают в `src/assets/fonts/icofont/` (уже подключены в проект).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+---
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## 🚀 Быстрый старт
 
-### `yarn icofont`
+1. Установите зависимости:
 
-If you want some icon, add svg file to **./src/fantasticon/icons/** and this command will generate new font with icons. New fonts available in **./src/fonts/icofont**, it's already imported into the project.
+    ```bash
+    yarn install
+    ```
+
+2. Запустите режим разработки:
+
+    ```bash
+    yarn dev
+    ```
+
+3. Откройте в браузере: [http://localhost:3000](http://localhost:3000)
+
+Сборка для продакшена: `yarn build`, затем `yarn start`.
+
+---
+
+## ⚙️ Полезные команды
+
+| Команда          | Назначение                                   |
+| ---------------- | -------------------------------------------- |
+| `yarn dev`       | Локальная разработка (hot reload)            |
+| `yarn build`     | Продакшен-сборка                             |
+| `yarn start`     | Запуск собранного приложения                 |
+| `yarn lint`      | Проверка ESLint                              |
+| `yarn lint:fix`  | Автоисправления ESLint, где возможно         |
+| `yarn typecheck` | Проверка типов TypeScript без emit           |
+| `yarn pretty`    | Форматирование кода через Prettier           |
+| `yarn test`      | Заглушка тестов (при необходимости замените) |
+
+Команда **`yarn eject`** из шаблона Create React App в этом проекте **не используется** — конфигурация идёт через Next.js и привычные конфиг-файлы в корне.
+
+---
+
+## 🔌 API и окружение
+
+- Прокси к ЦБ: маршрут **`GET /api/cbr`** с параметрами `date_req1`, `date_req2`, опционально `VAL_NM_RQ` (по умолчанию код USD — `R01235`).
+- Если клиент должен ходить не на тот же origin, задайте **`NEXT_PUBLIC_CBR_API_BASE`** (без завершающего `/`) — базовый URL, к которому клиент добавит `/api/cbr?...`.
+
+Отдельный **.NET-бэкенд** из монорепозитория здесь не поднимается: при появлении своего API настройте переменные `NEXT_PUBLIC_*` или прокси под вашу инфраструктуру.
+
+---
+
+## ✨ Иконочный шрифт (Fantasticon)
+
+Добавьте SVG в **`src/fantasticon/icons/`**, затем выполните:
+
+```bash
+yarn icofont
+```
+
+Обновлённый шрифт окажется в **`src/assets/fonts/icofont`** и уже импортируется в проект.
