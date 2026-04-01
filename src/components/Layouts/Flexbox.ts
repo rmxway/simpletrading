@@ -1,8 +1,8 @@
-import { CSSProperties } from 'react';
-import styled, { css } from 'styled-components/macro';
+import type { CSSProperties, PropsWithChildren } from 'react';
+import styled, { css } from 'styled-components';
 
 interface FlexboxTypes {
-	nowrap?: boolean;
+	$nowrap?: boolean;
 	/**
 	 * @default 'flex-start'
 	 * @param 'flex-start' - start of the main axis
@@ -12,7 +12,7 @@ interface FlexboxTypes {
 	 * @param 'space-around' - space around items
 	 * @param 'space-evenly' - space evenly between items
 	 */
-	justify?: CSSProperties['justifyContent'];
+	$justify?: CSSProperties['justifyContent'];
 	/**
 	 * @default 'flex-start'
 	 * @param 'flex-start' - start of the cross axis
@@ -21,7 +21,7 @@ interface FlexboxTypes {
 	 * @param 'space-between' - space between items
 	 * @param 'stretch' - stretch items to the same height
 	 */
-	align?: CSSProperties['alignItems'];
+	$align?: CSSProperties['alignItems'];
 	/**
 	 * @default 'row'
 	 * @param 'row' - main axis is horizontal
@@ -29,22 +29,22 @@ interface FlexboxTypes {
 	 * @param 'row-reverse' - main axis is horizontal, reverse order
 	 * @param 'column-reverse' - main axis is vertical, reverse order
 	 */
-	direction?: CSSProperties['flexDirection'];
+	$direction?: CSSProperties['flexDirection'];
 	/**
 	 * @default 0
 	 * @param number - gap in pixels between items
 	 */
-	gap?: number;
+	$gap?: number;
 }
 
-export const Flexbox = styled.div<FlexboxTypes>`
-	${({ nowrap, justify, align, direction, gap }) => css`
+export const Flexbox = styled.div<PropsWithChildren<FlexboxTypes>>`
+	${({ $nowrap, $justify, $align, $direction, $gap }) => css`
 		display: flex;
 		flex-grow: 1;
-		flex-wrap: ${nowrap ? 'nowrap' : 'wrap'};
-		justify-content: ${justify || 'flex-start'};
-		align-items: ${align || 'flex-start'};
-		flex-direction: ${direction || 'row'};
-		gap: ${gap || 0}px;
+		flex-wrap: ${$nowrap ? 'nowrap' : 'wrap'};
+		justify-content: ${$justify || 'flex-start'};
+		align-items: ${$align || 'flex-start'};
+		flex-direction: ${$direction || 'row'};
+		gap: ${$gap || 0}px;
 	`}
 `;

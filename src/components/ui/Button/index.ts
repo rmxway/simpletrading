@@ -1,53 +1,18 @@
 import { darken, desaturate } from 'polished';
-import styled, { css } from 'styled-components/macro';
+import styled, { css, type DefaultTheme } from 'styled-components';
+
+export type ButtonVariant = 'success' | 'danger' | 'primary' | 'white' | 'black';
 
 type CommonProps = {
-	w100?: boolean;
-	inactive?: boolean;
-	margins?: boolean;
+	$w100?: boolean;
+	$inactive?: boolean;
+	$margins?: boolean;
 };
 
-type SuccessButton = CommonProps & {
-	success?: boolean;
-	danger?: never;
-	primary?: never;
-	white?: never;
-	black?: never;
+export type ButtonProps = CommonProps & {
+	/** Цветовой вариант; без значения — нейтральная кнопка */
+	$variant?: ButtonVariant;
 };
-
-type DangerButton = CommonProps & {
-	success?: never;
-	danger?: boolean;
-	primary?: never;
-	white?: never;
-	black?: never;
-};
-
-type PrimaryButton = CommonProps & {
-	success?: never;
-	danger?: never;
-	primary?: boolean;
-	white?: never;
-	black?: never;
-};
-
-type WhiteButton = CommonProps & {
-	success?: never;
-	danger?: never;
-	primary?: never;
-	white?: boolean;
-	black?: never;
-};
-
-type BlackButton = CommonProps & {
-	success?: never;
-	danger?: never;
-	primary?: never;
-	white?: never;
-	black?: boolean;
-};
-
-export type ButtonProps = SuccessButton | DangerButton | PrimaryButton | WhiteButton | BlackButton;
 
 const mixinButton = ($background = '#fff', $color = '#fff') => css`
 	border-color: transparent;
@@ -71,63 +36,73 @@ const mixinButton = ($background = '#fff', $color = '#fff') => css`
 	}
 `;
 
-const ButtonUI = styled.button<ButtonProps>`
-	appearance: none;
-	border: 1px solid #aaa;
-	background: none;
-	border-radius: ${(props) => props.theme.radius.borderRadius};
-	padding: 11px 16px 10px;
-	color: #777;
-	font-size: 12px;
-	font-weight: 800;
-	text-transform: uppercase;
+function variantMixin(theme: DefaultTheme, variant: ButtonVariant | undefined) {
+	switch (variant) {
+		case 'success':
+			return mixinButton(theme.colors.success);
+		case 'danger':
+			return mixinButton(theme.colors.danger);
+		case 'primary':
+			return mixinButton(theme.colors.primary, '#6d410a');
+		case 'white':
+			return mixinButton('#fff', theme.colors.success);
+		case 'black':
+			return mixinButton(theme.colors.dark);
+		default:
+			return null;
+	}
+}
 
-	${(props) =>
-		props.margins &&
+const ButtonUI = styled.button<ButtonProps>`
+	${({ theme, $w100, $inactive, $margins, $variant }) => css`
+		appearance: none;
+		border: 1px solid #aaa;
+		background: none;
+
+		border-radius: ${theme.radius.borderRadius};
+
+		padding: 11px 16px 10px;
+		color: #777;
+		font-size: 12px;
+		font-weight: 800;
+		text-transform: uppercase;
+
+		${$margins &&
 		css`
 			margin-bottom: 10px;
 			margin-right: 10px;
 		`}
 
-	cursor: pointer;
-	line-height: 1;
-	transition: 0.1s all;
+		cursor: pointer;
+		line-height: 1;
+		transition: 0.1s all;
 
-	&:hover {
-		background-color: #f9f9f9;
-	}
+		&:hover {
+			background-color: #f9f9f9;
+		}
 
-	&:active {
-		background-color: #f1f1f1;
-	}
+		&:active {
+			background-color: #f1f1f1;
+		}
 
-	&:disabled,
-	&:disabled:hover {
-		background-color: ${(props) => props.theme.colors.gray.$2};
-		color: ${(props) => props.theme.colors.gray.$5};
-		cursor: default;
-	}
+		&:disabled,
+		&:disabled:hover {
+			background-color: ${theme.colors.gray.$2};
+			color: ${theme.colors.gray.$5};
+			cursor: default;
+		}
 
-	${(props) => {
-		if (props?.success) return mixinButton(props.theme.colors.success);
-		if (props?.danger) return mixinButton(props.theme.colors.danger);
-		if (props?.primary) return mixinButton(props.theme.colors.primary, '#6d410a');
-		if (props?.white) return mixinButton('#fff', props.theme.colors.success);
-		if (props?.black) return mixinButton(props.theme.colors.dark);
-		return null;
-	}}
+		${variantMixin(theme, $variant)}
 
-	${(props) => {
-		if (props?.w100)
-			return css`
-				width: 100%;
-			`;
-		if (props?.inactive)
-			return css`
-				pointer-events: none;
-			`;
-		return null;
-	}}
+		${$w100 &&
+		css`
+			width: 100%;
+		`}
+		${$inactive &&
+		css`
+			pointer-events: none;
+		`}
+	`}
 `;
 
 export { ButtonUI };

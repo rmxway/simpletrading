@@ -1,4 +1,4 @@
-import { DefaultTheme } from 'styled-components/macro';
+import { DefaultTheme } from 'styled-components';
 
 const defaultTheme: DefaultTheme = {
 	name: 'default',

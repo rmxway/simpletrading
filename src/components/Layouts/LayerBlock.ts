@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion';
 import { lighten } from 'polished';
-import styled, { css } from 'styled-components/macro';
+import styled, { css } from 'styled-components';
 
 interface LayerTypes {
-	mt?: string;
+	$mt?: boolean;
 }
 
 export const LayerBlock = styled(motion.div)<LayerTypes>`
-	${({ theme, mt }) => css`
+	${({ theme, $mt }) => css`
 		position: relative;
 		padding: ${theme.layout.paddingX3};
 		border-radius: ${theme.radius.borderRadius};
@@ -15,7 +15,7 @@ export const LayerBlock = styled(motion.div)<LayerTypes>`
 		color: ${theme.colors.gray.$4};
 		background-color: ${lighten(0.03, theme.layout.bgColor)};
 		box-shadow: ${theme.layout.shadow};
-		${mt &&
+		${$mt &&
 		css`
 			margin-top: ${theme.layout.marginX2};
 		`}

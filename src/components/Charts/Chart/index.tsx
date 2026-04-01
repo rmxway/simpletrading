@@ -1,19 +1,29 @@
+'use client';
+
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
+import type { PropsWithChildren } from 'react';
 import { FC, useEffect, useRef } from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled, { css } from 'styled-components';
 
 import { defaultTheme } from '@/theme';
 
 import { ChartType } from './types';
 
-const ChartRoot = styled.div<{ $height: string; $width: string }>`
+const CHART_MOUNT_CLASS = 'chart-mount';
+
+const ChartWrapper = styled.div<PropsWithChildren<{ $height: string; $width: string }>>`
 	${({ $height, $width }) => css`
 		height: ${$height};
 		width: ${$width};
+
+		& > .${CHART_MOUNT_CLASS} {
+			height: 100%;
+			width: 100%;
+		}
 	`}
 `;
 
-export const CreateChart: FC<ChartType> = ({ height = '300px', width = '100%', data, ...props }) => {
+export const CreateChart: FC<ChartType> = ({ height = '300px', width = '100%', data }) => {
 	const ref = useRef<HTMLDivElement>(null);
 	const chartRef = useRef<IChartApi | null>(null);
 	const seriesRef = useRef<ISeriesApi<'Area'> | null>(null);
@@ -63,7 +73,11 @@ export const CreateChart: FC<ChartType> = ({ height = '300px', width = '100%', d
 		chartRef.current?.timeScale().fitContent();
 	}, [data]);
 
-	return <ChartRoot {...props} ref={ref} $height={height} $width={width} />;
+	return (
+		<ChartWrapper $height={height} $width={width}>
+			<div ref={ref} className={CHART_MOUNT_CLASS} />
+		</ChartWrapper>
+	);
 };
 
 export { ChartSkeleton } from './ChartSkeleton';

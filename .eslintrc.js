@@ -1,49 +1,18 @@
 module.exports = {
 	root: true,
-	env: {
-		es6: true,
-		browser: true,
-	},
-	extends: [
-		'airbnb',
-		'plugin:import/recommended',
-		'plugin:import/typescript',
-		'plugin:@typescript-eslint/eslint-recommended',
-		'plugin:@typescript-eslint/recommended',
-		'prettier',
-		'plugin:react/recommended',
-		'plugin:react-hooks/recommended',
-	],
-	plugins: [
-		'@typescript-eslint',
-		'unused-imports',
-		'simple-import-sort',
-		'prettier',
-		'react',
-		'react-hooks',
-	],
-	globals: {
-		Atomics: 'readonly',
-		SharedArrayBuffer: 'readonly',
-	},
-	parserOptions: {
-		ecmaFeatures: {
-			jsx: true,
+	extends: ['next/core-web-vitals', 'plugin:import/recommended', 'plugin:import/typescript', 'prettier'],
+	plugins: ['import', 'simple-import-sort', 'unused-imports', 'prettier'],
+	settings: {
+		'import/resolver': {
+			typescript: {},
+			node: {
+				extensions: ['.ts', '.tsx', '.js', '.jsx'],
+			},
 		},
-		sourceType: 'module',
 	},
 	rules: {
-		'class-methods-use-this': 'off',
-		'no-param-reassign': 'off',
-		'no-shadow': 'off',
-		'no-plusplus': 'off',
-		'no-new': 'off',
-		camelcase: 'off',
-		'react/react-in-jsx-scope': 'off',
-        // "react/display-name": 'off',
-		'no-underscore-dangle': 'off',
-		'simple-import-sort/imports': 'error',
-		'simple-import-sort/exports': 'error',
+		'@next/next/no-img-element': 'off',
+		'@next/next/no-page-custom-font': 'off',
 		'import/first': 'error',
 		'import/newline-after-import': 'error',
 		'import/no-duplicates': 'error',
@@ -51,17 +20,6 @@ module.exports = {
 			'error',
 			{
 				devDependencies: true,
-			},
-		],
-		'@typescript-eslint/no-shadow': 'error',
-		'unused-imports/no-unused-imports': 'error',
-		'unused-imports/no-unused-vars': [
-			'warn',
-			{
-				vars: 'all',
-				varsIgnorePattern: '^_',
-				args: 'after-used',
-				argsIgnorePattern: '^_',
 			},
 		],
 		'import/no-named-as-default': 'error',
@@ -74,33 +32,17 @@ module.exports = {
 				tsx: 'never',
 			},
 		],
-
-		'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
-		'react/function-component-definition': [
-			'error',
+		'simple-import-sort/imports': 'error',
+		'simple-import-sort/exports': 'error',
+		'unused-imports/no-unused-imports': 'error',
+		'unused-imports/no-unused-vars': [
+			'warn',
 			{
-				namedComponents: 'arrow-function',
-				unnamedComponents: 'arrow-function',
+				vars: 'all',
+				varsIgnorePattern: '^_',
+				args: 'after-used',
+				argsIgnorePattern: '^_',
 			},
 		],
-		'react/jsx-props-no-spreading': 'off',
-		'react/require-default-props': 'off',
 	},
-	settings: {
-		'import/resolver': {
-			typescript: {},
-			node: {
-				extensions: ['.ts', '.tsx', '.js'],
-			},
-		},
-	},
-	parser: '@typescript-eslint/parser',
-	overrides: [
-		{
-			files: ['craco.config.ts'],
-			rules: {
-				'@typescript-eslint/no-require-imports': 'off',
-			},
-		},
-	],
 };

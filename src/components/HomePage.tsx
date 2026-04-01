@@ -1,12 +1,16 @@
-import { FC } from 'react';
-import styled from 'styled-components/macro';
+'use client';
 
-import { ChartSkeleton, CreateChart, InfoBlock } from '@/components';
+import { FC } from 'react';
+import styled, { css } from 'styled-components';
+
+import { ChartSkeleton, CreateChart, InfoBlock, Table } from '@/components';
 import { Container, Flexbox, LayerBlock } from '@/components/Layouts';
 import { useCurrencyData } from '@/hooks/useCurrencyData';
 
 const StatusMessage = styled.p`
-	color: ${(props) => props.theme.colors.gray.$4};
+	${({ theme }) => css`
+		color: ${theme.colors.gray.$4};
+	`}
 	margin: 0;
 `;
 
@@ -14,13 +18,13 @@ const round2 = (value: number): number => Math.round(value * 100) / 100;
 
 const absPercent = (value: number): number => round2(Math.abs(value));
 
-const MainPage: FC = () => {
+export const HomePage: FC = () => {
 	const { areaData, stats, loading, error } = useCurrencyData();
 
 	return (
 		<Container>
 			<h2>Курс USD/RUB (ЦБ РФ)</h2>
-			<LayerBlock mt="true">
+			<LayerBlock $mt>
 				{loading ? <StatusMessage>Загрузка курса…</StatusMessage> : null}
 				{!loading && error ? <StatusMessage>{error}</StatusMessage> : null}
 				{!loading && !error && stats ? (
@@ -52,7 +56,7 @@ const MainPage: FC = () => {
 			</LayerBlock>
 
 			<h2>Динамика за 3 месяца</h2>
-			<LayerBlock mt="true">
+			<LayerBlock $mt>
 				{loading ? <ChartSkeleton /> : null}
 				{!loading && !error && areaData.length > 0 ? <CreateChart data={areaData} /> : null}
 				{!loading && !error && areaData.length === 0 ? (
@@ -60,13 +64,10 @@ const MainPage: FC = () => {
 				) : null}
 			</LayerBlock>
 
-			{/* <h2>Сделки</h2>
-		<LayerBlock mt="true">
-			<Table />
-		</LayerBlock> */}
+			<h2>Сделки</h2>
+			<LayerBlock $mt>
+				<Table />
+			</LayerBlock>
 		</Container>
 	);
 };
-
-export { MainPage };
-export default MainPage;

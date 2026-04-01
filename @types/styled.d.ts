@@ -1,4 +1,4 @@
-import 'styled-components/macro';
+import 'styled-components';
 
 interface Colors {
 	primary: string;
@@ -41,7 +41,7 @@ interface Radius {
 	borderRadius: string;
 }
 
-declare module 'styled-components/macro' {
+declare module 'styled-components' {
 	export interface DefaultTheme {
 		name: string;
 		colors: Colors;

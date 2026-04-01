@@ -1,5 +1,5 @@
 import { rgba } from 'polished';
-import { css } from 'styled-components/macro';
+import { css } from 'styled-components';
 
 export const rightHideGradient = (bg = '#ffffff') => css`
 	position: relative;

@@ -13,7 +13,7 @@ interface TableItemTypes {
 export const demoJSON: TableItemTypes[] = [
 	{
 		id: 1,
-		img: './src/assets/img/logos/JPEG/alibaba.jpg',
+		img: 'https://picsum.photos/seed/alibaba/48/48',
 		title: 'Alibaba',
 		link: 'http://alibaba.com',
 		date: '22.03.2023',
@@ -23,7 +23,7 @@ export const demoJSON: TableItemTypes[] = [
 	},
 	{
 		id: 2,
-		img: '../../assets/img/logos/JPEG/apple.jpg',
+		img: 'https://picsum.photos/seed/apple/48/48',
 		title: 'Apple',
 		link: 'http://apple.com',
 		date: '21.03.2023',
@@ -33,7 +33,7 @@ export const demoJSON: TableItemTypes[] = [
 	},
 	{
 		id: 3,
-		img: '../../assets/img/logos/JPEG/microsoft.jpg',
+		img: 'https://picsum.photos/seed/msft/48/48',
 		title: 'Microsoft',
 		link: 'http://microsoft.com',
 		date: '12.02.2023',
@@ -42,7 +42,7 @@ export const demoJSON: TableItemTypes[] = [
 	},
 	{
 		id: 4,
-		img: '../../assets/img/logos/JPEG/uhg.jpg',
+		img: 'https://picsum.photos/seed/uhg/48/48',
 		title: 'United Health Group',
 		link: 'http://uhg.com',
 		date: '22.03.2023',

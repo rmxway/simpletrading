@@ -1,6 +1,6 @@
 import './includes.scss';
 
-import { css } from 'styled-components/macro';
+import { css } from 'styled-components';
 
 const base = css`
 	*,
@@ -24,26 +24,30 @@ const base = css`
 		}
 
 		&::-webkit-scrollbar-thumb {
-			background-color: ${(props) => props.theme.colors.gray.$8};
-			border-radius: 100px;
+			${({ theme }) => css`
+				background-color: ${theme.colors.gray.$8};
+				border-radius: 100px;
 
-			&:hover {
-				background-color: ${(props) => props.theme.colors.gray.$7};
-			}
+				&:hover {
+					background-color: ${theme.colors.gray.$7};
+				}
+			`}
 		}
 	}
 
 	body {
-		overflow-y: scroll;
-		font-family: ${(props) => props.theme.fonts.base};
-		font-size: 18px;
-		display: block;
-		padding-top: 100px;
-		line-height: 1.25;
-		padding-bottom: 50px;
-		min-width: 320px;
-		color: #fff;
-		background-color: ${(props) => props.theme.colors.gray.$9};
+		${({ theme }) => css`
+			overflow-y: scroll;
+			font-family: ${theme.fonts.base};
+			font-size: 18px;
+			display: block;
+			padding-top: 100px;
+			line-height: 1.25;
+			padding-bottom: 50px;
+			min-width: 320px;
+			color: #fff;
+			background-color: ${theme.colors.gray.$9};
+		`}
 	}
 	code {
 		font-family: 'source-code-pro', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;

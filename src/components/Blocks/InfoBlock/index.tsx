@@ -37,7 +37,7 @@ const InfoBlock: FC<InfoBlockTypes> = ({
 			</AdditionalValue>
 		) : null}
 		{typeof state === 'number' && !Number.isNaN(state) ? (
-			<State plus={statePlus}>
+			<State $plus={statePlus}>
 				<i className="icofont icofont-arrow-down" /> {state} %
 			</State>
 		) : null}

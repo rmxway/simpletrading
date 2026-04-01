@@ -1,5 +1,8 @@
+import type { ComponentPropsWithoutRef } from 'react';
 import { FC } from 'react';
-import styled, { css, keyframes } from 'styled-components/macro';
+import styled, { css, keyframes } from 'styled-components';
+
+type RootProps = { $height: string } & ComponentPropsWithoutRef<'div'>;
 
 const pulse = keyframes`
 	0% {
@@ -13,7 +16,7 @@ const pulse = keyframes`
 	}
 `;
 
-const Root = styled.div<{ $height: string }>`
+const Root = styled.div<RootProps>`
 	${({ $height, theme }) => css`
 		height: ${$height};
 		width: 100%;
