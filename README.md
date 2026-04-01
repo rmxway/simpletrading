@@ -8,17 +8,19 @@
 
 На главной странице собраны график динамики, таблица значений и информационные блоки — всё завязано на данные Центробанка. Запросы к внешнему API идут через **собственный маршрут** приложения (`/api/cbr`), чтобы обойти ограничения браузера (CORS) и держать единую точку входа к источнику курсов.
 
+Данные на клиенте запрашиваются через **TanStack Query**: в рамках одной сессии без перезагрузки ответы кешируются в памяти (`staleTime` ~10 минут). Чтобы при **полном обновлении страницы** не дублировать сетевой запрос в тот же период, ответ прокси дополнительно кешируется в **`sessionStorage`** в [`src/services/cbr-api.ts`](src/services/cbr-api.ts) с тем же горизонтом.
+
 **Страница «О проекте»** — отдельный маршрут с поясняющим контентом.
 
 ---
 
 ## 🗺️ Что уже есть и что дальше
 
-| Сейчас                         | Впереди                           |
-| ------------------------------ | --------------------------------- |
-| Курс USD/RUB по данным ЦБ РФ   | Выбор актива (валюты и др.) в UI  |
-| График и таблица по диапазону  | Расширение списка инструментов    |
-| Next.js App Router, TypeScript | Улучшения UX под мультивалютность |
+| Сейчас                                          | Впереди                           |
+| ----------------------------------------------- | --------------------------------- |
+| Курс USD/RUB по данным ЦБ РФ                    | Выбор актива (валюты и др.) в UI  |
+| График и таблица по диапазону                   | Расширение списка инструментов    |
+| Next.js App Router, TypeScript, TanStack Query  | Улучшения UX под мультивалютность |
 
 ---
 
@@ -26,7 +28,8 @@
 
 - **Next.js** (App Router) — маршруты, API Route для прокси к ЦБ
 - **React** + **TypeScript**
-- **styled-components** — тема и компоненты
+- **TanStack Query** (`@tanstack/react-query`) — кеш запросов на клиенте, хуки вроде `useQuery` (глобально `staleTime` / `gcTime` задаются в [`src/app/query-provider.tsx`](src/app/query-provider.tsx))
+- **styled-components** — тема и компоненты (реестр стилей для SSR — [`src/app/styled-registry.tsx`](src/app/styled-registry.tsx))
 - **lightweight-charts** — график
 - **Yarn** — менеджер пакетов
 
@@ -41,6 +44,9 @@ src/
 ├── app/                    # Next.js App Router
 │   ├── page.tsx            # главная (HomePage)
 │   ├── layout.tsx
+│   ├── providers.tsx       # ThemeProvider, Navbar, QueryProvider
+│   ├── query-provider.tsx  # QueryClientProvider, дефолты TanStack Query
+│   ├── styled-registry.tsx # styled-components + SSR
 │   ├── about/              # страница «О проекте»
 │   └── api/cbr/            # прокси к XML ЦБ РФ
 ├── components/             # UI и страничные блоки
@@ -49,7 +55,7 @@ src/
 │   ├── Layouts/            # Container, Flexbox, LayerBlock, Space
 │   ├── Table/
 │   └── ui/                 # Button, Input, Navbar
-├── hooks/                  # например useCurrencyData
+├── hooks/                  # useCurrencyData (useQuery + данные ЦБ)
 ├── services/               # клиент к `/api/cbr` (cbr-api)
 ├── data/                   # демо-данные при необходимости
 ├── theme/                  # тема, глобальные стили, миксины
@@ -103,6 +109,7 @@ src/
 ## 🔌 API и окружение
 
 - Прокси к ЦБ: маршрут **`GET /api/cbr`** с параметрами `date_req1`, `date_req2`, опционально `VAL_NM_RQ` (по умолчанию код USD — `R01235`).
+- Клиентский вызов и **кеш `sessionStorage`** (10 минут) — в [`src/services/cbr-api.ts`](src/services/cbr-api.ts); ключ кеша учитывает параметры запроса и `NEXT_PUBLIC_CBR_API_BASE`.
 - Если клиент должен ходить не на тот же origin, задайте **`NEXT_PUBLIC_CBR_API_BASE`** (без завершающего `/`) — базовый URL, к которому клиент добавит `/api/cbr?...`.
 
 Отдельный **.NET-бэкенд** из монорепозитория здесь не поднимается: при появлении своего API настройте переменные `NEXT_PUBLIC_*` или прокси под вашу инфраструктуру.
