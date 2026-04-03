@@ -55,7 +55,7 @@ export const HomePage: FC = () => {
 				) : null}
 			</LayerBlock>
 
-			<h2>Динамика за 3 месяца</h2>
+			<h2>Динамика курса</h2>
 			<LayerBlock $mt>
 				{loading ? <ChartSkeleton /> : null}
 				{!loading && !error && areaData.length > 0 ? <CreateChart data={areaData} /> : null}
