@@ -24,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 					href="https://fonts.googleapis.com/css2?family=Play&family=Russo+One&display=swap"
 					rel="stylesheet"
 				/>
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 			</head>
 			<body>
 				<StyledComponentsRegistry>

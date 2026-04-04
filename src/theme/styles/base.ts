@@ -2,6 +2,8 @@ import './includes.scss';
 
 import { css } from 'styled-components';
 
+import { media } from '../media';
+
 const base = css`
 	*,
 	*::after,
@@ -35,11 +37,18 @@ const base = css`
 		}
 	}
 
+	html {
+		font-size: 16px;
+
+		${media.lessThan('md')`
+			font-size: 14px;
+		`}
+	}
+
 	body {
 		${({ theme }) => css`
 			overflow-y: scroll;
 			font-family: ${theme.fonts.base};
-			font-size: 18px;
 			display: block;
 			padding-top: 100px;
 			line-height: 1.25;
@@ -68,27 +77,27 @@ const base = css`
 	}
 
 	h1 {
-		font-size: xx-large;
+		font-size: 3rem;
 		margin: 24px 0;
 	}
 
 	h2 {
-		font-size: x-large;
+		font-size: 1.5rem;
 		margin: 20px 0;
 	}
 
 	h3 {
-		font-size: large;
+		font-size: 1rem;
 		margin: 16px 0;
 	}
 
 	h4 {
-		font-size: medium;
+		font-size: 0.75rem;
 		margin: 12px 0;
 	}
 
 	h5 {
-		font-size: small;
+		font-size: 0.5rem;
 		margin: 8px 0;
 	}
 
