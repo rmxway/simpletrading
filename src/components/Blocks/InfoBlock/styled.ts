@@ -9,7 +9,7 @@ export const InfoBlockStyled = styled.div<PropsWithChildren>`
 	color: #fff;
 	width: 100%;
 	${({ theme }) => css`
-		margin-bottom: calc(${theme.layout.marginX3} * 2);
+		margin-bottom: ${theme.layout.marginX3};
 	`}
 
 	${media.greaterThan('xs')`
@@ -31,7 +31,7 @@ export const Title = styled.div<PropsWithChildren>`
 `;
 
 export const MainValue = styled.div<PropsWithChildren>`
-	font-size: 2.2rem;
+	font-size: 2rem;
 	line-height: 1.2;
 	font-weight: 900;
 	${({ theme }) => css`
