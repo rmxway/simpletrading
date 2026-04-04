@@ -1,4 +1,11 @@
-const CBR_USD_CODE = 'R01235';
+/** Коды валют (VAL_NM_RQ) в сервисе динамики ЦБ РФ */
+export const CBR_VAL_CODES = {
+	USD: 'R01235',
+	EUR: 'R01239',
+	CNY: 'R01375',
+} as const;
+
+export type CbrQuoteCurrency = keyof typeof CBR_VAL_CODES;
 
 /** Как long staleTime в query-provider: после F5 данные берутся отсюда, без сети. */
 const CBR_CLIENT_CACHE_MS = 10 * 60 * 1000;
@@ -47,11 +54,11 @@ export const formatCbrQueryDate = (date: Date): string => {
 	return `${d}/${m}/${y}`;
 };
 
-export const fetchCbrUsdRubDynamics = async (from: Date, to: Date): Promise<string> => {
+export const fetchCbrQuoteDynamics = async (from: Date, to: Date, quote: CbrQuoteCurrency): Promise<string> => {
 	const params = new URLSearchParams({
 		date_req1: formatCbrQueryDate(from),
 		date_req2: formatCbrQueryDate(to),
-		VAL_NM_RQ: CBR_USD_CODE,
+		VAL_NM_RQ: CBR_VAL_CODES[quote],
 	});
 
 	const prefix = resolveCbrApiBase();
