@@ -1,22 +1,47 @@
 'use client';
 
+import { useState } from 'react';
+
 import { ChartSkeleton, CreateChart, InfoBlock } from '@/components';
 import { Container, Flexbox, LayerBlock, StatusMessage } from '@/components/Layouts';
-import { useCurrencyData } from '@/hooks/useCurrencyData';
+import { SelectOption, SelectUI } from '@/components/ui';
+import { type CbrQuoteCurrency, useCurrencyData } from '@/hooks/useCurrencyData';
 import { absPercent, round2 } from '@/services/utils';
 
+const QUOTE_OPTIONS: SelectOption[] = [
+	{ value: 'USD', label: 'USD / RUB' },
+	{ value: 'EUR', label: 'EU / RUB' },
+	{ value: 'CNY', label: 'CNY / RUB' },
+];
+
 export default function Page() {
-	const { areaData, stats, loading, error } = useCurrencyData();
+	const [quote, setQuote] = useState<CbrQuoteCurrency>('USD');
+	const { areaData, stats, loading, error } = useCurrencyData(quote);
+	const quoteLabel = QUOTE_OPTIONS.find((o) => o.value === quote)?.label ?? quote;
 
 	return (
 		<Container>
-			<h2>Курс USD/RUB (ЦБ РФ)</h2>
+			<h2>Курс {quoteLabel} (ЦБ РФ)</h2>
+			<div style={{ width: '200px' }}>
+				<SelectUI
+					name="actives"
+					label="Выберите актив"
+					options={QUOTE_OPTIONS}
+					value={quote}
+					onChange={(v) => setQuote(v as CbrQuoteCurrency)}
+				/>
+			</div>
+
 			<LayerBlock $mt>
 				{loading ? <StatusMessage>Загрузка курса…</StatusMessage> : null}
 				{!loading && error ? <StatusMessage>{error}</StatusMessage> : null}
 				{!loading && !error && stats ? (
 					<Flexbox>
-						<InfoBlock title="Текущий курс" mainValue={round2(stats.current)} mainCurrency="₽ за $1" />
+						<InfoBlock
+							title="Текущий курс"
+							mainValue={round2(stats.current)}
+							mainCurrency={`₽ за 1 ${quote}`}
+						/>
 						<InfoBlock
 							title="Изменение за день"
 							mainValue={round2(stats.changeDayAbs)}
