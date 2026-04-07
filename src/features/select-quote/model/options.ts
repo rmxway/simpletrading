@@ -1,4 +1,4 @@
-import type { SelectOption } from '@/shared/ui';
+import { SelectOption } from '@/shared/ui';
 
 export const QUOTE_OPTIONS: SelectOption[] = [
 	{ value: 'USD', label: 'USD / RUB' },

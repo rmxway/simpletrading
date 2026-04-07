@@ -1,9 +1,9 @@
 import { type FC } from 'react';
 
 import type { CbrQuoteCurrency } from '@/hooks/useCurrencyData';
-import { AppSelect } from '@/shared/ui';
+import { AppSelect } from '@/shared/ui/select';
 
-import { QUOTE_OPTIONS } from '../model/options';
+import { QUOTE_OPTIONS } from './model/options';
 
 type QuoteSelectProps = {
 	value: CbrQuoteCurrency;
@@ -19,3 +19,5 @@ export const QuoteSelect: FC<QuoteSelectProps> = ({ value, onChange }) => (
 		onChange={(next) => onChange(next as CbrQuoteCurrency)}
 	/>
 );
+
+export * from './model/options';

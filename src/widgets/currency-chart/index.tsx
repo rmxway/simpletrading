@@ -4,12 +4,12 @@ import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import { type DataAreaType } from '@/entities/quote';
-import { AppButton } from '@/shared/ui';
+import { AppButton } from '@/shared/ui/button';
 import { defaultTheme } from '@/theme';
 
-import { CHART_MOUNT_CLASS, ChartRoot, ChartWrapper, PeriodRow } from './styled';
-import { ChartPeriod } from './types';
-import { filterAreaDataByPeriod } from './utils';
+import { filterAreaDataByPeriod } from './lib/filter-area-data';
+import type { ChartPeriod } from './model/chart-period';
+import { CHART_MOUNT_CLASS, ChartRoot, ChartWrapper, PeriodRow, SkeletonRoot } from './styled';
 
 const PERIOD_OPTIONS: { id: ChartPeriod; label: string }[] = [
 	{ id: '3m', label: '3 месяца' },
@@ -94,4 +94,11 @@ export const CreateChart: FC<CreateChartProps> = ({ height = '300px', width = '1
 	);
 };
 
-export { ChartSkeleton } from './ChartSkeleton';
+export interface ChartSkeletonProps {
+	height?: string;
+	className?: string;
+}
+
+export const ChartSkeleton: FC<ChartSkeletonProps> = ({ height = '300px', ...props }) => (
+	<SkeletonRoot {...props} $height={height} role="status" aria-label="Загрузка графика" />
+);

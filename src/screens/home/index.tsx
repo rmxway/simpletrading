@@ -1,30 +1,46 @@
 'use client';
 
-import { useState } from 'react';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
-import { Container, Flexbox, LayerBlock, StatusMessage } from '@/components/Layouts';
 import { QUOTE_OPTIONS, QuoteSelect } from '@/features/select-quote';
 import { type CbrQuoteCurrency, useCurrencyData } from '@/hooks/useCurrencyData';
 import { absPercent, round2 } from '@/services/utils';
+import { InfoBlock } from '@/shared/ui/info-block';
+import { Container, Flexbox, LayerBlock, StatusMessage } from '@/shared/ui/layouts';
 import { ChartSkeleton, CreateChart } from '@/widgets/currency-chart';
-import { InfoBlock } from '@/widgets/currency-stats';
+
+const QuoteSelectWrapper = styled.div`
+	position: relative;
+	width: 200px;
+`;
 
 export const HomePage = () => {
 	const [quote, setQuote] = useState<CbrQuoteCurrency>('USD');
-	const { areaData, stats, loading, error } = useCurrencyData(quote);
+	const { areaData, stats, loading, isLayerBusy, error } = useCurrencyData(quote);
+	const [snackbarDismissed, setSnackbarDismissed] = useState(false);
+
+	useEffect(() => {
+		if (error) {
+			setSnackbarDismissed(false);
+		}
+	}, [error]);
+
 	const quoteLabel = QUOTE_OPTIONS.find((option) => option.value === quote)?.label ?? quote;
+	const showSnackbar = Boolean(error) && !snackbarDismissed;
 
 	return (
 		<Container>
 			<h2>Курс {quoteLabel} (ЦБ РФ)</h2>
-			<div style={{ width: '200px' }}>
+			<QuoteSelectWrapper>
 				<QuoteSelect value={quote} onChange={setQuote} />
-			</div>
+			</QuoteSelectWrapper>
 
-			<LayerBlock $mt>
+			<LayerBlock $mt $busy={isLayerBusy}>
 				{loading ? <StatusMessage>Загрузка курса...</StatusMessage> : null}
-				{!loading && error ? <StatusMessage>{error}</StatusMessage> : null}
-				{!loading && !error && stats ? (
+				{!loading && stats ? (
 					<Flexbox>
 						<InfoBlock
 							title="Текущий курс"
@@ -57,13 +73,24 @@ export const HomePage = () => {
 			</LayerBlock>
 
 			<h2>Динамика курса</h2>
-			<LayerBlock $mt>
+			<LayerBlock $mt $busy={isLayerBusy}>
 				{loading ? <ChartSkeleton /> : null}
-				{!loading && !error && areaData.length > 0 ? <CreateChart data={areaData} /> : null}
-				{!loading && !error && areaData.length === 0 ? (
+				{!loading && areaData.length > 0 ? <CreateChart data={areaData} /> : null}
+				{!loading && areaData.length === 0 && !error ? (
 					<StatusMessage>Нет данных для графика</StatusMessage>
 				) : null}
 			</LayerBlock>
+
+			<Snackbar
+				open={showSnackbar}
+				autoHideDuration={8000}
+				onClose={() => setSnackbarDismissed(true)}
+				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+			>
+				<Alert severity="error" variant="filled" onClose={() => setSnackbarDismissed(true)}>
+					{error}
+				</Alert>
+			</Snackbar>
 		</Container>
 	);
 };

@@ -1,6 +1,6 @@
 import type { DataAreaType } from '@/entities/quote';
 
-import { ChartPeriod } from './types';
+import type { ChartPeriod } from '../model/chart-period';
 
 const toLocalIsoDate = (d: Date): string => {
 	const y = d.getFullYear();

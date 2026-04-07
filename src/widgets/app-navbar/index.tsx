@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 
-import { Container, Flexbox, Space } from '@/components/Layouts';
+import { Container, Flexbox, Space } from '@/shared/ui/layouts';
 
 import { NavbarLogo, Wrapper } from './styled';
 
