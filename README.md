@@ -6,11 +6,13 @@
 
 ## 📌 О проекте
 
-На главной странице — график динамики, информационные блоки (текущий курс и изменения) и выбор валюты; всё завязано на данные Центробанка. Запросы к внешнему API идут через **собственный маршрут** приложения (`/api/cbr`), чтобы обойти ограничения браузера (CORS) и держать единую точку входа к источнику курсов.
+Данные ЦБ РФ на клиент приходят через **`/api/cbr`**: так обходим CORS и не светим внешний endpoint в браузере.
 
-Данные на клиенте запрашиваются через **TanStack Query** ([`useCurrencyData`](src/hooks/useCurrencyData.ts) с аргументом `quote`: `'USD' | 'EUR' | 'CNY'`). Ключ запроса включает валюту; при переключении используется **`placeholderData: keepPreviousData`**, чтобы не мигать пустым экраном, пока грузится новая серия. В рамках сессии ответы кешируются в памяти (`staleTime` ~10 минут в [`src/app/query-provider.tsx`](src/app/query-provider.tsx)). Чтобы при **полном обновлении страницы** не дублировать запрос за тот же период и ту же валюту, ответ прокси дополнительно кешируется в **`sessionStorage`** в [`src/services/cbr-api.ts`](src/services/cbr-api.ts) с тем же горизонтом (~10 минут); ключ кеша учитывает параметры запроса, в том числе код валюты.
+Клиент — **TanStack Query** и [`useCurrencyData`](src/hooks/useCurrencyData.ts) (`quote`: USD / EUR / CNY). При смене валюты экран не пустеет (`keepPreviousData`); пока тянется новая серия, карточки [`LayerBlock`](src/shared/ui/layouts/layer-block.ts) уходят в **`$busy`** (полупрозрачность, без кликов). Сбой запроса не стирает последние удачные цифры; ошибку показывают **Snackbar** + **Alert** (MUI) на главной.
 
-**Страница «О проекте»** — отдельный маршрут с поясняющим контентом.
+Кеш в памяти — см. [`query-provider`](src/app/query-provider.tsx) (`staleTime` порядка 10 минут); после перезагрузки страницы тот же горизонт даёт **`sessionStorage`** в [`cbr-api`](src/services/cbr-api.ts).
+
+Отдельно — маршрут **«О проекте»**.
 
 ---
 
@@ -19,7 +21,7 @@
 | Сейчас                                         | Впереди                                |
 | ---------------------------------------------- | -------------------------------------- |
 | USD, EUR, CNY к RUB (ЦБ РФ), селект на главной | Другие инструменты и источники данных  |
-| График и инфоблоки за ~3 месяца               | Таблица значений, экспорт, уведомления |
+| График и инфоблоки за ~3 месяца               | Таблица значений, экспорт, расширенные уведомления |
 | Next.js App Router, TypeScript, TanStack Query | По мере необходимости                  |
 
 ---
@@ -29,8 +31,10 @@
 - **Next.js** (App Router) — маршруты, API Route для прокси к ЦБ
 - **React** + **TypeScript**
 - **TanStack Query** (`@tanstack/react-query`) — кеш запросов на клиенте, хуки вроде `useQuery` (глобально `staleTime` / `gcTime` задаются в [`src/app/query-provider.tsx`](src/app/query-provider.tsx))
-- **styled-components** — тема и компоненты (реестр стилей для SSR — [`src/app/styled-registry.tsx`](src/app/styled-registry.tsx))
-- **lightweight-charts** — график
+- **styled-components** — основная тема приложения, каркас и кастомные блоки (реестр для SSR — [`src/app/styled-registry.tsx`](src/app/styled-registry.tsx))
+- **MUI Material** (`@mui/material`) + **Emotion** (`@emotion/react`, `@emotion/styled`) — готовые интерактивные примитивы и уведомления: кнопка, селект, **Snackbar** / **Alert**, обёртка **`ThemeProvider`** из `@mui/material/styles` в [`src/app/providers.tsx`](src/app/providers.tsx); токены MUI заданы в [`src/shared/config/mui-theme.ts`](src/shared/config/mui-theme.ts) и сосуществуют с темой styled-components
+- **lightweight-charts** — график (виджет [`currency-chart`](src/widgets/currency-chart/index.tsx))
+- **framer-motion** — анимации у [`LayerBlock`](src/shared/ui/layouts/layer-block.ts)
 - **Yarn** — менеджер пакетов
 
 ---
@@ -42,27 +46,28 @@
 ```text
 src/
 ├── app/                    # Next.js App Router
-│   ├── page.tsx            # главная (HomePage)
+│   ├── page.tsx            # рендер главной (экран из screens/home)
 │   ├── layout.tsx
-│   ├── providers.tsx       # ThemeProvider, Navbar, QueryProvider
+│   ├── providers.tsx       # MUI + styled-components ThemeProvider, QueryProvider, Navbar
 │   ├── query-provider.tsx  # QueryClientProvider, дефолты TanStack Query
 │   ├── styled-registry.tsx # styled-components + SSR
 │   ├── about/              # страница «О проекте»
 │   └── api/cbr/            # прокси к XML ЦБ РФ
-├── components/             # UI и страничные блоки
-│   ├── Blocks/InfoBlock/
-│   ├── Charts/Chart/
-│   ├── Layouts/            # Container, Flexbox, LayerBlock, Space
-│   ├── Table/
-│   └── ui/                 # Button, Input, Navbar, Select
+├── screens/                # страничные композиции (например home)
+├── widgets/                # крупные блоки экрана: app-navbar, currency-chart
+├── features/               # фичи с UI и моделью (например select-quote)
+├── entities/               # доменные сущности и типы (quote)
+├── shared/
+│   ├── ui/                 # переиспользуемый UI: layouts (Container, Flexbox, LayerBlock…),
+│   │                       # info-block, button (MUI), select (MUI), table
+│   └── config/             # mui-theme.ts — тема MUI
 ├── hooks/                  # useCurrencyData(quote) — useQuery + разбор XML ЦБ
 ├── services/               # cbr-api: fetchCbrQuoteDynamics, коды VAL_NM_RQ
-├── data/                   # демо-данные при необходимости
-├── theme/                  # тема, глобальные стили, миксины
+├── data/                   # статические данные (меню и т.п.)
+├── theme/                  # тема styled-components, глобальные стили
 ├── utils/                  # разбор XML и прочее
 ├── assets/                 # шрифты, изображения
-├── fantasticon/icons/      # исходные SVG для генерации иконочного шрифта
-└── …                       # store, server, pages — по мере развития проекта
+└── fantasticon/icons/      # исходные SVG для генерации иконочного шрифта
 ```
 
 `public/` — статика для Next.js. Сгенерированные файлы иконочного шрифта после `yarn icofont` попадают в `src/assets/fonts/icofont/` (уже подключены в проект).
