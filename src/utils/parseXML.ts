@@ -1,4 +1,4 @@
-import type { DataAreaType } from '@/components/Charts/Chart/types';
+import type { DataAreaType } from '@/entities/quote';
 
 export interface CbrRatePoint {
 	date: string;

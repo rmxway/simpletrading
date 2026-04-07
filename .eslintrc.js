@@ -14,6 +14,7 @@ module.exports = {
 	},
 	rules: {
 		'@next/next/no-img-element': 'off',
+		'@next/next/no-export-all-in-page': 'off',
 		'@next/next/no-page-custom-font': 'off',
 		'import/first': 'error',
 		'import/newline-after-import': 'error',
