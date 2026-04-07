@@ -2,7 +2,7 @@
 
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
-import type { DataAreaType } from '@/components/Charts/Chart/types';
+import type { DataAreaType } from '@/entities/quote';
 import { type CbrQuoteCurrency, fetchCbrQuoteDynamics } from '@/services/cbr-api';
 import { computeRateStats, parseCbrDynamicXml, type RateStats, toAreaSeriesData } from '@/utils/parseXML';
 

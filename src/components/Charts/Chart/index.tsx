@@ -3,10 +3,12 @@
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
+import { type DataAreaType } from '@/entities/quote';
+import { AppButton } from '@/shared/ui';
 import { defaultTheme } from '@/theme';
 
-import { CHART_MOUNT_CLASS, ChartRoot, ChartWrapper, PeriodButton, PeriodRow } from './styled';
-import { ChartPeriod, ChartType } from './types';
+import { CHART_MOUNT_CLASS, ChartRoot, ChartWrapper, PeriodRow } from './styled';
+import { ChartPeriod } from './types';
 import { filterAreaDataByPeriod } from './utils';
 
 const PERIOD_OPTIONS: { id: ChartPeriod; label: string }[] = [
@@ -15,7 +17,13 @@ const PERIOD_OPTIONS: { id: ChartPeriod; label: string }[] = [
 	{ id: '1w', label: '1 неделя' },
 ];
 
-export const CreateChart: FC<ChartType> = ({ height = '300px', width = '100%', data }) => {
+type CreateChartProps = {
+	height?: string;
+	width?: string;
+	data: DataAreaType[];
+};
+
+export const CreateChart: FC<CreateChartProps> = ({ height = '300px', width = '100%', data }) => {
 	const [period, setPeriod] = useState<ChartPeriod>('3m');
 	const filteredData = useMemo(() => filterAreaDataByPeriod(data, period), [data, period]);
 
@@ -74,9 +82,9 @@ export const CreateChart: FC<ChartType> = ({ height = '300px', width = '100%', d
 		<ChartRoot>
 			<PeriodRow>
 				{PERIOD_OPTIONS.map(({ id, label }) => (
-					<PeriodButton key={id} type="button" $active={period === id} onClick={() => setPeriod(id)}>
+					<AppButton key={id} type="button" active={period === id} onClick={() => setPeriod(id)}>
 						{label}
-					</PeriodButton>
+					</AppButton>
 				))}
 			</PeriodRow>
 			<ChartWrapper $height={height} $width={width}>
