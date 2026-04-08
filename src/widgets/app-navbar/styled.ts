@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { lighten } from 'polished';
 import styled, { css } from 'styled-components';
 
 export const Wrapper = styled.div`
@@ -8,7 +9,7 @@ export const Wrapper = styled.div`
 	align-items: center;
 	margin-bottom: 2.5rem;
 	${({ theme }) => css`
-		background-color: ${theme.colors.gray.$8};
+		background-color: ${lighten(0.03, theme.layout.bgColor)};
 		box-shadow: ${theme.layout.shadow};
 	`}
 	z-index: 100;
