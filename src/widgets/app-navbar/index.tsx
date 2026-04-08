@@ -2,19 +2,21 @@
 
 import { FC } from 'react';
 
-import { Container, Flexbox, Space } from '@/shared/ui/layouts';
+import { Container, Flexbox } from '@/shared/ui/layouts';
 
-import { NavbarLogo, Wrapper } from './styled';
+import { LogoMark, LogoTitle, NavbarLogo, Wrapper } from './styled';
 
 const Navbar: FC = () => {
 	return (
 		<Wrapper>
 			<Container>
-				<Flexbox $align="center">
-					<NavbarLogo href="/">
-						ST <span>Simple Trading</span>
+				<Flexbox $align="center" $justify="center">
+					<NavbarLogo href="/" aria-label="Simple Trading — на главную">
+						<LogoMark>ST</LogoMark>
+						<LogoTitle>
+							<strong>Simple Trading</strong>
+						</LogoTitle>
 					</NavbarLogo>
-					<Space />
 				</Flexbox>
 			</Container>
 		</Wrapper>
