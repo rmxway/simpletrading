@@ -2,13 +2,11 @@ import Link from 'next/link';
 import styled, { css } from 'styled-components';
 
 export const Wrapper = styled.div`
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
+	position: relative;
 	height: 75px;
 	display: flex;
 	align-items: center;
+	margin-bottom: 2.5rem;
 	${({ theme }) => css`
 		background-color: ${theme.colors.gray.$8};
 		box-shadow: ${theme.layout.shadow};
