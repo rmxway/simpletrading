@@ -1,9 +1,9 @@
 @font-face {
 	font-family: 'icofont';
 	src:
-		url('.//icofont.ttf?290d591a15968c1f58ca17d01a368add') format('truetype'),
-		url('.//icofont.woff?290d591a15968c1f58ca17d01a368add') format('woff'),
-		url('.//icofont.woff2?290d591a15968c1f58ca17d01a368add') format('woff2');
+		url('.//icofont.ttf?99c03c3b8beb3ca4678ee2a20eaa0393') format('truetype'),
+		url('.//icofont.woff?99c03c3b8beb3ca4678ee2a20eaa0393') format('woff'),
+		url('.//icofont.woff2?99c03c3b8beb3ca4678ee2a20eaa0393') format('woff2');
 }
 
 i[class^='icofont-']:before,
@@ -21,13 +21,4 @@ i[class*=' icofont-']:before {
 
 .icofont-arrow-down:before {
 	content: '\f101';
-}
-.icofont-star-filled:before {
-	content: '\f102';
-}
-.icofont-star:before {
-	content: '\f103';
-}
-.icofont-times-small:before {
-	content: '\f104';
 }

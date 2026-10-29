@@ -6,7 +6,7 @@
 
 ## 📌 О проекте
 
-Данные ЦБ РФ на клиент приходят через **`/api/cbr`**: так обходим CORS и не светим внешний endpoint в браузере.
+Данные ЦБ РФ на клиент приходят через **`/api/cbr`**: так обходим CORS.
 
 Клиент — **TanStack Query** и [`useCurrencyData`](src/hooks/useCurrencyData.ts) (`quote`: USD / EUR / CNY). При смене валюты экран не пустеет (`keepPreviousData`); пока тянется новая серия, карточки [`LayerBlock`](src/shared/ui/layouts/layer-block.ts) уходят в **`$busy`** (полупрозрачность, без кликов). Сбой запроса не стирает последние удачные цифры; ошибку показывают **Snackbar** + **Alert** (MUI) на главной.
 
@@ -18,11 +18,10 @@
 
 ## 🗺️ Что уже есть и что дальше
 
-| Сейчас                                         | Впереди                                |
-| ---------------------------------------------- | -------------------------------------- |
-| USD, EUR, CNY к RUB (ЦБ РФ), селект на главной | Другие инструменты и источники данных  |
-| График и инфоблоки за ~3 месяца               | Таблица значений, экспорт, расширенные уведомления |
-| Next.js App Router, TypeScript, TanStack Query | По мере необходимости                  |
+| Сейчас                                         | Впереди                                            |
+| ---------------------------------------------- | -------------------------------------------------- |
+| USD, EUR, CNY к RUB (ЦБ РФ), селект на главной | Другие инструменты и источники данных              |
+| График и инфоблоки за ~3 месяца                | Таблица значений, экспорт, расширенные уведомления |
 
 ---
 
@@ -35,7 +34,6 @@
 - **MUI Material** (`@mui/material`) + **Emotion** (`@emotion/react`, `@emotion/styled`) — готовые интерактивные примитивы и уведомления: кнопка, селект, **Snackbar** / **Alert**, обёртка **`ThemeProvider`** из `@mui/material/styles` в [`src/app/providers.tsx`](src/app/providers.tsx); токены MUI заданы в [`src/shared/config/mui-theme.ts`](src/shared/config/mui-theme.ts) и сосуществуют с темой styled-components
 - **lightweight-charts** — график (виджет [`currency-chart`](src/widgets/currency-chart/index.tsx))
 - **framer-motion** — анимации у [`LayerBlock`](src/shared/ui/layouts/layer-block.ts)
-- **Yarn** — менеджер пакетов
 
 ---
 
@@ -79,7 +77,7 @@ src/
 1. Установите зависимости:
 
     ```bash
-    yarn install
+    yarn
     ```
 
 2. Запустите режим разработки:
@@ -116,8 +114,6 @@ src/
 - Прокси к ЦБ: маршрут **`GET /api/cbr`** с обязательными `date_req1`, `date_req2` и параметром **`VAL_NM_RQ`** (код валюты в сервисе динамики ЦБ). Если `VAL_NM_RQ` не передан, на стороне API подставляется USD (`R01235`). Клиент для трёх котировок задаёт коды явно — см. `CBR_VAL_CODES` в [`src/services/cbr-api.ts`](src/services/cbr-api.ts): **USD** `R01235`, **EUR** `R01239`, **CNY** `R01375`.
 - Клиентский вызов **`fetchCbrQuoteDynamics(from, to, quote)`** и **кеш `sessionStorage`** — в том же файле; ключ кеша учитывает полный query string и `NEXT_PUBLIC_CBR_API_BASE`.
 - Если клиент должен ходить не на тот же origin, задайте **`NEXT_PUBLIC_CBR_API_BASE`** (без завершающего `/`) — базовый URL, к которому клиент добавит `/api/cbr?...`.
-
-Отдельный **.NET-бэкенд** из монорепозитория здесь не поднимается: при появлении своего API настройте переменные `NEXT_PUBLIC_*` или прокси под вашу инфраструктуру.
 
 ---
 
