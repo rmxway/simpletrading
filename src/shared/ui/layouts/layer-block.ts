@@ -21,9 +21,11 @@ export const LayerBlock = styled(motion.div).attrs<LayerTypes>(({ $busy }) => ({
 		transition: opacity 0.2s ease;
 		opacity: ${$busy ? 0.3 : 1};
 		pointer-events: ${$busy ? 'none' : 'auto'};
-		${$mt &&
-		css`
-			margin-top: ${theme.layout.marginX2};
-		`}
+		${
+			$mt &&
+			css`
+				margin-top: ${theme.layout.marginX2};
+			`
+		}
 	`}
 `;

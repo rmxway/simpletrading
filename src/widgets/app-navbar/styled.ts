@@ -75,12 +75,7 @@ export const LogoTitle = styled.span`
 
 		strong {
 			font-weight: 700;
-			background: linear-gradient(
-				90deg,
-				#ffffff 0%,
-				${theme.colors.primary} 70%,
-				${theme.colors.primary} 100%
-			);
+			background: linear-gradient(90deg, #ffffff 0%, ${theme.colors.primary} 70%, ${theme.colors.primary} 100%);
 			-webkit-background-clip: text;
 			background-clip: text;
 			-webkit-text-fill-color: transparent;

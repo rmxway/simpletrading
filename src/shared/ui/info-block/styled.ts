@@ -77,10 +77,12 @@ export const State = styled.div<PropsWithChildren<{ $plus?: boolean }>>`
 			margin: 4px 8px 4px 0;
 			color: #222;
 
-			${$plus &&
-			css`
-				transform: scale(1, -1);
-			`}
+			${
+				$plus &&
+				css`
+					transform: scale(1, -1);
+				`
+			}
 
 			background-color: ${$plus ? theme.colors.success : theme.colors.danger};
 		}

@@ -13,10 +13,12 @@ export const Container = styled.div<ContainerProps>`
 		max-width: 100%;
 		margin: 0 auto;
 
-		${$mt &&
-		css`
-			margin-top: ${theme.layout.marginX2};
-		`}
+		${
+			$mt &&
+			css`
+				margin-top: ${theme.layout.marginX2};
+			`
+		}
 	`}
 
 	${media.greaterThan('sm')`

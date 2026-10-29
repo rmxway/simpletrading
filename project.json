@@ -1,0 +1,22 @@
+{
+	"id": "simpletrading",
+	"title": "Simple Trading",
+	"subtitle": "USD, EUR, CNY к рублю по данным ЦБ РФ",
+	"description": "Трекер курсов доллара, евро и юаня к рублю: график за три месяца, переключение валюты, живые данные ЦБ. Интерфейс не моргает при смене котировки — старые цифры остаются, пока грузятся новые. Если запрос упал, значения не пропадают, а ошибка всплывает уведомлением. Архитектура FSD для лёгкой поддержки.",
+	"stack": [
+		"Next.js",
+		"TypeScript",
+		"TanStack Query",
+		"styled-components",
+		"MUI",
+		"lightweight-charts",
+		"Framer Motion",
+		"ESLint",
+		"Prettier"
+	],
+	"kind": "pet",
+	"githubUrl": "https://github.com/rmxway/simpletrading",
+	"demoUrl": "https://simpletrading-page.vercel.app/",
+	"accent": "yellow",
+	"previewImage": "img/preview.jpg"
+}
